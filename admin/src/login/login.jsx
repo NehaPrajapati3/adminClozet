@@ -1,47 +1,79 @@
 import React, { useState } from "react";
 import './login.css'
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
+//import { useDispatch } from "react-redux";
 
-import { toast } from "react-toastify";
 
 const Login = ()=>{
    
-    const [email,setAdminEmail] = useState('');
-    const [password,SetAdminPassword]= useState('');
+   const [user, setUser] = useState({
+     email: "",
+     password: "",
+   });
+   const navigate = useNavigate();
+   //const dispatch = useDispatch();
 
-    const handleLoginForm = async (e)=>{
-        e.preventDefault();
-try {
-  
-   toast.success("Admin Login Successfully",{
-    position: "top-center"
-   })
+   const onSubmitHandler = async (e) => {
+     e.preventDefault();
+     console.log("outside log in try{}");
+     try {
+       console.log("inside log in try{}");
+       console.log(`React app api url:${process.env.REACT_APP_API_URL}`);
+       const res = await axios.post(
+         `${process.env.REACT_APP_API_URL}/api/v1/admin/login`,
+         user,
+         {
+           headers: {
+             "Content-Type": "application/json",
+           },
+           withCredentials: true,
+         }
+       );
 
+       navigate("/");
 
-} catch (error) {
-    toast.success("Admin Login not Successfully",{
-        position: "buttom-center"
-       })
-}
+       console.log(res);
+       //dispatch(login(res.data));
 
-    }
-    return(
-        <>
+       console.log(res.data);
+     } catch (error) {
+       toast.error(error.response.data.message);
+       console.log(error);
+     }
+     setUser({
+       email: "",
+       password: "",
+     });
+   };
+    return (
+      <>
         <div className="login-section">
-            <div className="login-header">
+          <div className="login-header">
             <h2>Register</h2>
-          <form onSubmit={handleLoginForm}>
-           
-            <input type="email" value={email} onChange={(e) => setAdminEmail(e.target.value)} placeholder="Email" />
-            <input type="password" value={password} onChange={(e) => SetAdminPassword(e.target.value)} placeholder="Password" />
-            <button type='submit' >Login</button>
-            <p>New user <Link to={'/register'}>Register Here</Link></p>
-            
+            <form onSubmit={onSubmitHandler}>
+              <input
+                type="email"
+                value={user.email}
+                onChange={(e) => setUser({ ...user, email: e.target.value })}
+                placeholder="Email"
+              />
+              <input
+                type="password"
+                value={user.password}
+                onChange={(e) => setUser({ ...user, password: e.target.value })}
+                placeholder="Password"
+              />
+              <button type="submit">Login</button>
+              <p>
+                New user <Link to={"/register"}>Register Here</Link>
+              </p>
             </form>
-            </div>
+          </div>
         </div>
-        </>
-    )
+      </>
+    );
 }
 
 export default Login;
