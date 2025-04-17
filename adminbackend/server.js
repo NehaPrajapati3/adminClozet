@@ -5,7 +5,8 @@ import cors from "cors";
 import connectDB from "./config/database.js";
 import adminRoute from "./routes/adminRoute.js";
 import storeRoute from "./routes/storeInfoRoute.js";
-
+import path from "path";
+import { fileURLToPath } from "url";
 
 
 dotenv.config({});
