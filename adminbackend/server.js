@@ -38,7 +38,7 @@ app.use("/api/v1/store", storeRoute);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const clientBuildPath = path.join(__dirname, "../clozetweb/build");
+const clientBuildPath = path.join(__dirname, "../admin/build");
 app.use(express.static(clientBuildPath));
 
 const corsOption = {
