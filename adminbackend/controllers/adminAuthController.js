@@ -79,9 +79,12 @@ export const login = async (req, res) => {
       userId: admin._id,
     };
 
+    console.log("tokenData:", tokenData)
+
     const token = await jwt.sign(tokenData, process.env.JWT_SECRET_KEY, {
       expiresIn: "1d",
     });
+    console.log("token: ", token);
 
     return res
       .status(200)
@@ -108,6 +111,8 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   console.log("Inside log out admin");
   try {
+      console.log("Inside log out admin try");
+
     return res.status(200).cookie("token", "", { maxAge: 0 }).json({
       message: "Logged out successfully",
     });

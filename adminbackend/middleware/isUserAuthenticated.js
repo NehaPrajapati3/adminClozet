@@ -7,6 +7,8 @@ const isUserAuthenticated = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({ message: "User  is not authenticated" });
     }
+    console.log(`process.env.JWT_SECRET_KEY is  ${process.env.JWT_SECRET_KEY}`);
+
     const decode = await jwt.verify(token, process.env.JWT_SECRET_KEY);
     if (!decode || !decode.userId) {
       return res.status(401).json({ message: "Invalid token" });
@@ -17,7 +19,7 @@ const isUserAuthenticated = async (req, res, next) => {
 
     next();
   } catch (error) {
-    console.log(error);
+    console.log("Error inside isUserAuthenticated: ", error);
   }
 };
 export default isUserAuthenticated;

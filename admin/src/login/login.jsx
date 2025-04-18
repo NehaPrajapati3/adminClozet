@@ -3,7 +3,8 @@ import './login.css'
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-//import { useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authSlice";
 
 
 const Login = ()=>{
@@ -13,7 +14,7 @@ const Login = ()=>{
      password: "",
    });
    const navigate = useNavigate();
-   //const dispatch = useDispatch();
+   const dispatch = useDispatch();
 
    const onSubmitHandler = async (e) => {
      e.preventDefault();
@@ -35,7 +36,7 @@ const Login = ()=>{
        navigate("/");
 
        console.log(res);
-       //dispatch(login(res.data));
+       dispatch(login(res.data));
 
        console.log(res.data);
      } catch (error) {

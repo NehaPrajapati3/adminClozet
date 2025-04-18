@@ -3,7 +3,8 @@ import './register.css'
 import { Link, useNavigate  } from "react-router-dom";
 import axios  from 'axios';
 import toast from "react-hot-toast";
-
+import { useDispatch } from "react-redux";
+import { login as authLogin } from "../redux/authSlice";
 
 
 const Register = () => {
@@ -16,16 +17,15 @@ const Register = () => {
     
   });
   const navigate = useNavigate();
- // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const handleRegisterForm = async (e) => {
     e.preventDefault();
     console.log("Sign up page")
     console.log("Sign up user=====", user);
     try {
-          console.log("Sign up inside try page");
-          console.log("React App new", process.env.REACT_APP_API_URL);
-
+      console.log("Sign up inside try page");
+      console.log("React App new", process.env.REACT_APP_API_URL);
 
       const res = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/signup`,
@@ -37,17 +37,20 @@ const Register = () => {
           withCredentials: true,
         }
       );
-      if (res.data.success) {
-       // dispatch(authLogin(user));
+      if (res?.data?.success) {
+        dispatch(authLogin(user));
         navigate("/login");
-        toast.success(res.data.message);
+        toast.success(res?.data?.message);
       }
 
       console.log(res);
     } catch (error) {
-      toast.error(error.response.data.message);
-      console.log(error);
+      const errorMessage =
+        error?.response?.data?.message || "Something went wrong";
+      toast.error(errorMessage);
+      console.error("Registration error:", error);
     }
+
     setUser({
       firstName: "",
       lastName: "",
